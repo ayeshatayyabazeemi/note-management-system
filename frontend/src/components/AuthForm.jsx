@@ -27,9 +27,11 @@ const AuthForm = () => {
       <div className="row content-row">
         {/* LEFT (Sign In Content) */}
         <div className="col align-items-center flex-col">
-          <div className="text sign-in">
-            <h2>Welcome</h2>
-          </div>
+          <div className="text sign-in moveup">
+  <h2>Welcome Back to NoteSpace</h2>
+  <p>Securely manage your personal notes anytime, anywhere.</p>
+</div>
+
           <div className="img sign-in">{/* Add image here if needed */}</div>
         </div>
 

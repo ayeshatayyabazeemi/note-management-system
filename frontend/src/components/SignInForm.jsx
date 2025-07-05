@@ -4,7 +4,15 @@ import { motion } from 'framer-motion';
 import { BsPerson, BsLock } from 'react-icons/bs';
 import {useState}from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useAuth } from './AuthContext'; 
+import { useNavigate } from 'react-router-dom';
+
+
+
 const SignInForm = ({ toggleForm }) => {
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
   const [formdata,setformdata]=useState({
     username:"",
     password:""
@@ -19,14 +27,22 @@ const SignInForm = ({ toggleForm }) => {
       username:"",
     password:""
     });
-    alert("sign in successfull");
+    toast.success("Signup successful!");
     console.log(res);
+    setUser(res.data.user);
     localStorage.setItem("jwtToken",res.data.token);
+    navigate('/dashboard');
+
   }catch(error){
     
-      alert("sign in failed"+ error.response?.data?.message || error.message)
+    toast.error("Sign in failed: " + (error.response?.data?.message || error.message));
     
   }}
+
+  // const forgetPassword=async()=>{
+  //   const res=await axios.post('http://localhost:5000/api/auth/changepassword')
+  // }
+
   return (
     <motion.div
       className="form-wrapper align-items-center"
@@ -44,9 +60,9 @@ const SignInForm = ({ toggleForm }) => {
           <input type="password" placeholder="Password" value={formdata.password} onChange={(e) => setformdata({ ...formdata, password: e.target.value })} />
         </div>
         <button onClick={handleSignin}>Sign in</button>
-        <p>
-          <b>Forgot password?</b>
-        </p>
+        {/* <p>
+          <b onClick={forgetPasswors}>Forgot password?</b>
+        </p> */}
         <p>
           <span>Don't have an account?</span>{' '}
           <b onClick={toggleForm} className="pointer">Sign up here</b>
