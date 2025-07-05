@@ -28,7 +28,7 @@ const signup = async (req, res) => {
 // Login
 const signin = async (req, res) => {
   try {
-    const { username, pwd } = req.body;
+    const { username, password } = req.body;
 
     // Find user
     const user = await User.findOne({ username });
@@ -37,7 +37,7 @@ const signin = async (req, res) => {
     }
 
     // Check password
-    const isMatch = await bcrypt.compare(pwd, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Incorrect password' });
     }

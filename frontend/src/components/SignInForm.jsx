@@ -2,8 +2,31 @@ import React from 'react';
 import './SignInForm.css';
 import { motion } from 'framer-motion';
 import { BsPerson, BsLock } from 'react-icons/bs';
-
+import {useState}from 'react';
+import axios from 'axios';
 const SignInForm = ({ toggleForm }) => {
+  const [formdata,setformdata]=useState({
+    username:"",
+    password:""
+  })
+  const handleSignin= async ()=>{
+    try{
+      const res=await axios.post('http://localhost:5000/api/auth/signin',{
+      username:formdata.username,
+      password:formdata.password
+    });
+    setformdata({
+      username:"",
+    password:""
+    });
+    alert("sign in successfull");
+    console.log(res);
+    localStorage.setItem("jwtToken",res.data.token);
+  }catch(error){
+    
+      alert("sign in failed"+ error.response?.data?.message || error.message)
+    
+  }}
   return (
     <motion.div
       className="form-wrapper align-items-center"
@@ -14,13 +37,13 @@ const SignInForm = ({ toggleForm }) => {
       <div className="form sign-in">
         <div className="input-group">
           <BsPerson className="icon" />
-          <input type="text" placeholder="Username" />
+          <input type="text" placeholder="Username" value={formdata.username} onChange={(e)=> setformdata({...formdata,username:e.target.value})} />
         </div>
         <div className="input-group">
           <BsLock className="icon" />
-          <input type="password" placeholder="Password" />
+          <input type="password" placeholder="Password" value={formdata.password} onChange={(e) => setformdata({ ...formdata, password: e.target.value })} />
         </div>
-        <button>Sign in</button>
+        <button onClick={handleSignin}>Sign in</button>
         <p>
           <b>Forgot password?</b>
         </p>
